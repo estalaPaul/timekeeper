@@ -41,7 +41,7 @@ var weekCmd = &cobra.Command{
             week = fmt.Sprintf("%d-%d", currentYear, currentWeek)
         }
 
-        if ! utils.Exists(fmt.Sprintf("entries/week-%s", week)) {
+        if ! utils.Exists(fmt.Sprintf("%s/entries/week-%s", utils.GetDataDir(), week)) {
             tableData := pterm.TableData{
                 {"Entry", "Hours", "Minutes", "Seconds"},
                 {"TOTAL", "0", "0", "0"},
@@ -54,7 +54,7 @@ var weekCmd = &cobra.Command{
         }
 
 
-        entries, err := os.ReadDir(fmt.Sprintf("entries/week-%s", week))
+        entries, err := os.ReadDir(fmt.Sprintf("%s/entries/week-%s", utils.GetDataDir(), week))
         if err != nil {
             pterm.Error.Printf("Error reading %s directory: %s\n", week, err)
         }
@@ -73,7 +73,7 @@ var weekCmd = &cobra.Command{
                 continue
             }
 
-            entryData := decodeFile(fmt.Sprintf("entries/week-%s/%s", week, entry.Name()))
+            entryData := decodeFile(fmt.Sprintf("%s/entries/week-%s/%s", utils.GetDataDir(), week, entry.Name()))
 
             hours, err := strconv.ParseInt(entryData["hours"], 10, 64)
             if err != nil {
