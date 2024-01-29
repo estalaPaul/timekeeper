@@ -1,24 +1,25 @@
 package utils
 
 import (
-    "os"
-    "errors"
-    "strconv"
-    "time"
-    "encoding/json"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+	"strconv"
+	"time"
 
-    "github.com/pterm/pterm"
+	"github.com/pterm/pterm"
 )
 
 func GetCurrentEntry() map[string]string {
-    if ! Exists("current.json") {
+    if ! Exists(fmt.Sprintf("%s/current.json", GetDataDir())) {
         pterm.Println()
         pterm.Error.Println("There is no active time entry.")
         pterm.Println()
         os.Exit(1)
     }
 
-    data, err := os.ReadFile("current.json")
+    data, err := os.ReadFile(fmt.Sprintf("%s/current.json", GetDataDir()))
     if err != nil {
         pterm.Error.Printf("Error reading data: %s\n", err)
         os.Exit(1)
@@ -82,4 +83,8 @@ func GetElapsedTime(timestamp string) (endTime time.Time, times map[string]int64
         "minutes": minutesPassed,
         "hours": hoursPassed,
     }
+}
+
+func GetDataDir() string {
+    return "/home/pulpo/Documents/personal/repos/timekeeper/"
 }

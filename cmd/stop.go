@@ -45,19 +45,19 @@ func saveEntry(endTime time.Time, seconds int64, minutes int64, hours int64, des
 
     year, week := endTime.ISOWeek()
     weekDirectory := fmt.Sprintf("week-%d-%d", year, week)
-    err = os.MkdirAll(fmt.Sprintf("entries/%s", weekDirectory), os.ModePerm)
+    err = os.MkdirAll(fmt.Sprintf("%s/entries/%s", utils.GetDataDir(), weekDirectory), os.ModePerm)
     if err != nil {
         pterm.Error.Printf("Error creating week directory: %s\n", err)
         return
     }
 
-    err = os.WriteFile(fmt.Sprintf("entries/%s/entry-%s.json", weekDirectory, endTime.Format(time.RFC3339)), jsonData, 0666)
+    err = os.WriteFile(fmt.Sprintf("%s/entries/%s/entry-%s.json", utils.GetDataDir(), weekDirectory, endTime.Format(time.RFC3339)), jsonData, 0666)
     if err != nil {
         pterm.Error.Printf("Error writing data: %s\n", err)
         return
     }
 
-    e := os.Remove("current.json") 
+    e := os.Remove(fmt.Sprintf("%s/current.json", utils.GetDataDir())) 
     if e != nil { 
         pterm.Error.Printf("Error deleting current entry file: %s\n", err)
         return

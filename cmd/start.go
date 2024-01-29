@@ -1,18 +1,18 @@
 /*
 Copyright © 2024 Paul Estala pestala495@gmail.com
-
 */
 package cmd
 
 import (
-    "time"
-    "encoding/json"
-    "os"
-    "strconv"
+	"encoding/json"
+	"fmt"
+	"os"
+	"strconv"
+	"time"
 
-    "github.com/estalaPaul/timekeeper/utils"
+	"github.com/estalaPaul/timekeeper/utils"
+	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
-    "github.com/pterm/pterm"
 )
 
 // startCmd represents the start command
@@ -22,7 +22,7 @@ var startCmd = &cobra.Command{
 	Long: `Start tracking time. If given
     the first argument will be used as a description.`,
 	Run: func(cmd *cobra.Command, args []string) {
-        if utils.Exists("current.json") {
+        if utils.Exists(fmt.Sprintf("%s/current.json", utils.GetDataDir())) {
             pterm.Println()
             pterm.Error.Println("You've already started time keeping, stop current time before starting again.")
             pterm.Println()
@@ -46,7 +46,7 @@ var startCmd = &cobra.Command{
             return
         }
 
-        err = os.WriteFile("current.json", jsonData, 0666)
+        err = os.WriteFile(fmt.Sprintf("%s/current.json", utils.GetDataDir()), jsonData, 0666)
         if err != nil {
             pterm.Error.Printf("Error writing data: %s\n", err)
             return
