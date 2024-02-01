@@ -99,6 +99,20 @@ var weekCmd = &cobra.Command{
             })
         }
 
+        if totals["seconds"] > 59 {
+            excessSecondsInMinutes := totals["seconds"] / 60
+            leftoverSeconds := totals["seconds"] - (excessSecondsInMinutes * 60)
+            totals["minutes"] = totals["minutes"] + excessSecondsInMinutes
+            totals["seconds"] = leftoverSeconds
+        }
+
+        if totals["minutes"] > 59 {
+            excessMinutesInHours := totals["minutes"] / 60
+            leftoverMinutes := totals["minutes"] - (excessMinutesInHours * 60)
+            totals["hours"] = totals["hours"] + excessMinutesInHours
+            totals["minutes"] = leftoverMinutes
+        }
+
         tableData = append(tableData, []string{
             "", "", "", "", "",
         })
